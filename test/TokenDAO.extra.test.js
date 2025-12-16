@@ -57,4 +57,62 @@ describe("Testing adicional Token + DAO", function () {
     const ownerBalance = await token.balanceOf(owner.address);
     expect(proposal.voteCount).to.equal(ownerBalance);
   });
+
+
+  it("5️ No se permite doble votación", async () => {
+    await dao.createProposal("Propuesta Doble Voto");
+    await dao.vote(1);
+    await expect(dao.vote(1)).to.be.revertedWith("Ya has votado esta propuesta");
+  });
+
+  it("6️ No se puede votar sin tokens", async () => {
+    await dao.createProposal("Propuesta Sin Tokens");
+    await expect(dao.connect(user1).vote(1)).to.be.revertedWith("No tienes tokens para votar");
+  });
+
+  it("7️ getProposal retorna los datos correctos", async () => {
+    await dao.createProposal("Datos Correctos");
+    const data = await dao.getProposal(1);
+    expect(data[0]).to.equal("Datos Correctos");
+    expect(data[1]).to.equal(0n);
+    expect(data[2]).to.equal(false);
+  });
+
+  it("8️ Las propuestas son independientes", async () => {
+    await dao.createProposal("P1");
+    await dao.createProposal("P2");
+
+    await dao.vote(1);
+
+    const p1 = await dao.proposals(1);
+    const p2 = await dao.proposals(2);
+
+    const ownerBalance = await token.balanceOf(owner.address);
+    expect(p1.voteCount).to.equal(ownerBalance);
+    expect(p2.voteCount).to.equal(0n);
+  });
+
+  it("9️ El peso del voto es exacto al balance", async () => {
+    await token.transfer(user1.address, 500n);
+    await dao.createProposal("Peso Exacto");
+
+    await dao.connect(user1).vote(1);
+
+    const proposal = await dao.proposals(1);
+    expect(proposal.voteCount).to.equal(500n);
+  });
+
+  it("10 La votación es acumulativa", async () => {
+    await token.transfer(user1.address, 100n);
+    await dao.createProposal("Voto Acumulativo");
+
+    await dao.vote(1);
+    await dao.connect(user1).vote(1);
+
+    const proposal = await dao.proposals(1);
+    const totalExpected = await token.totalSupply();
+
+    expect(proposal.voteCount).to.equal(totalExpected);
+  });
 });
+

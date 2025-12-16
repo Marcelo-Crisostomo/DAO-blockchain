@@ -67,6 +67,10 @@ npx hardhat run scripts/deploy-local.ts
 npx hardhat run scripts/demo-dao.ts
 ```
 
+> [!TIP]
+> Para instrucciones más detalladas sobre el despliegue y otros comandos, consulta la **[Guía de Despliegue Completa](./GUIA_DEPLOYMENT.md)**.
+
+
 ---
 
 ## Pruebas (Testing)
@@ -79,6 +83,10 @@ El proyecto incluye un set de pruebas en la carpeta `test/`. Para ejecutarlas:
 ```bash
 npx hardhat test
 ```
+
+![Estado de Pruebas](./test.png)
+*Captura de pantalla: Ejecución exitosa de los tests unitarios en la consola.*
+
 
 ### Cómo Agregar Nuevas Pruebas
 1.  Crea un nuevo archivo `.js` o `.ts` dentro de la carpeta `test/` (ej: `test/NuevasPruebas.test.js`).
