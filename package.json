@@ -1,0 +1,15 @@
+{
+  "name": "dao-simple-example",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "hardhat test"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "hardhat": "^2.22.3"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0"
+  }
+}
